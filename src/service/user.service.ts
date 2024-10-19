@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import logger from "../utils/logger";
 import { errorResponse } from "../utils/responses";
 import { hashPassword, verifyPassword } from "../utils/userAuth.utils";
+import { compare } from "bcrypt";
 
 interface RegiserUserInput {
     name: string,
@@ -28,4 +29,22 @@ export const registerUserService = async({name, email, password} : RegiserUserIn
         logger.error(`END: Register User Service Failed`)
         throw new Error("Error while creating user: " + error.message);
     }
+}
+
+
+export const validatePassword = async(
+    {email, password}:
+
+    {email: string, password: string}) => {
+    const user = await User.findOne({email})
+    if(!user){
+        return false
+    }
+
+    const isValid = await compare(password, user.password)
+    if(!isValid){
+        return false
+    }
+
+    return user
 }

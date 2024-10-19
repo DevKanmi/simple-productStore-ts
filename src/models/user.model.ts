@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 import { Iuser } from "../types/user.types";
 
 // Define the user schema
+
+
 const userSchema = new Schema<Iuser>(
   {
     email: {
